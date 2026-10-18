@@ -95,7 +95,11 @@
       "category": "public.app-category.finance",
       "files": [
         "!**/node_modules/better-sqlite3/prebuilds/{win32,linux,linuxmusl}-*.node"
-      ]
+      ],
+      "artifactName": "FundManager-${version}-mac-${arch}.app.${ext}"
+    },
+    "dmg": {
+      "artifactName": "FundManager-${version}-mac-${arch}.${ext}"
     },
     "linux": {
       "target": [

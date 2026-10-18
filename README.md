@@ -160,8 +160,10 @@ GitHub Actions workflows live in [.github/workflows](.github/workflows):
 | Platform | Files |
 | --- | --- |
 | Windows (x64) | `FundManager-X.Y.N-win-x64-setup.exe` (installer), `FundManager-X.Y.N-win-x64-portable.exe` (no install) |
-| macOS (Apple Silicon / Intel) | `FundManager-X.Y.N-mac-arm64.dmg`, `…-mac-x64.dmg`, plus `.zip` versions of both |
+| macOS (Apple Silicon / Intel) | `FundManager-X.Y.N-mac-arm64.dmg`, `…-mac-x64.dmg` (disk image installers), and `FundManager-X.Y.N-mac-arm64.app.zip`, `…-mac-x64.app.zip` (the `Fund Manager.app` bundle itself) |
 | Linux (x64 / arm64) | `FundManager-X.Y.N-linux-x86_64.AppImage`, `…-linux-arm64.AppImage`, `fund-manage_X.Y.N_amd64.deb`, `…_arm64.deb` |
+
+A `.app` is a folder, so it is published zipped. Unzip it (Safari does this automatically) to get `Fund Manager.app`, then drag it into *Applications*. Pick `arm64` for Apple Silicon (M-series) Macs and `x64` for Intel Macs.
 
 **Opening unsigned builds**: without signing certificates, each OS warns once.
 

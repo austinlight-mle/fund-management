@@ -55,7 +55,7 @@ jobs:
             target: --win # NSIS installer + portable .exe (x64)
           - name: macOS
             os: macos-latest
-            target: --mac # .dmg + .zip for Apple Silicon (arm64) and Intel (x64)
+            target: --mac # .dmg + the .app bundle (as .app.zip) for Apple Silicon (arm64) and Intel (x64)
           - name: Linux
             os: ubuntu-latest
             target: --linux # AppImage + .deb (x64, arm64)
