@@ -51,11 +51,20 @@ jobs:
       - name: Drive the real app with Playwright
         run: npm run test:e2e
 
+      # Same run with animation frames arriving late (worst case of a throttled
+      # window): catches UI code that moves focus a frame late and steals keystrokes.
+      - name: Drive the real app with late animation frames
+        run: npm run test:e2e
+        env:
+          E2E_LATE_FRAMES: '1'
+
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: e2e-screenshots
-          path: e2e/screenshots/
+          path: |
+            e2e/screenshots/
+            e2e/screenshots-late-frames/
           if-no-files-found: ignore
           retention-days: 7

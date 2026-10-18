@@ -92,6 +92,21 @@ export function mountPurchases(container, ctx) {
   };
   let autocompletes = [];
   let disposed = false;
+  let pendingFocus = null; // { el, select }: requested by a row while it is being rendered
+
+  /**
+   * Focuses the field a freshly rendered row asked for, synchronously, as soon
+   * as the rows are in the page. (Deferring it to an animation frame let the
+   * focus arrive late, e.g. in a throttled window, and pull it away from the
+   * field the user was already typing in.)
+   */
+  function applyPendingFocus() {
+    const p = pendingFocus;
+    pendingFocus = null;
+    if (!p || !p.el.isConnected) return;
+    p.el.focus();
+    if (p.select) p.el.select();
+  }
 
   // ---- static layout -----------------------------------------------------
   const monthBar = h('div', { class: 'month-bar' });
@@ -327,6 +342,7 @@ export function mountPurchases(container, ctx) {
     if (isLocked && S.ledger.entries.length === 0) {
       ledgerBody.append(h('tr', { class: 'placeholder-row' }, h('td', { colspan: 5 }, t('purchases.empty'))));
     }
+    applyPendingFocus();
   }
 
   function ledgerRow(entry, isLocked) {
@@ -456,12 +472,7 @@ export function mountPurchases(container, ctx) {
         h('button', { class: 'icon-btn', id: 'edit-cancel', title: t('common.cancel'), onclick: (ev) => (ev.stopPropagation(), cancelLeftEdit()) }, icon('x', { size: 16 }))
       )
     );
-    requestAnimationFrame(() => {
-      if (!row.isConnected) return;
-      const target = isFund && e.id === null ? amount : summary;
-      target.focus();
-      target.select();
-    });
+    pendingFocus = { el: isFund && e.id === null ? amount : summary, select: true };
     return row;
   }
 
@@ -677,6 +688,7 @@ export function mountPurchases(container, ctx) {
       itemsBody.append(h('tr', { class: 'placeholder-row' }, h('td', { colspan: 7 }, t('items.empty'))));
     }
     updateTotals();
+    applyPendingFocus();
   }
 
   function itemRow(row, i, isLocked) {
@@ -921,9 +933,8 @@ export function mountPurchases(container, ctx) {
     refreshHint();
     updateRowTotal();
     if (row.focus) {
-      const target = { price, standard }[row.focus] || name;
+      pendingFocus = { el: { price, standard }[row.focus] || name, select: false };
       row.focus = null;
-      requestAnimationFrame(() => target.isConnected && target.focus());
     }
     return tr;
   }

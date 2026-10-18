@@ -211,7 +211,8 @@ export function mountCategories(container, ctx) {
           : null
       )
     );
-    requestAnimationFrame(() => name.isConnected && name.focus());
+    // Synchronously, so a late frame can never take focus away from another field.
+    if (name.isConnected) name.focus();
   }
 
   async function remove(cat) {

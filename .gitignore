@@ -24,6 +24,7 @@ demo-data/
 
 # ---- tests -----------------------------------------------------------------
 e2e/screenshots/
+e2e/screenshots-late-frames/
 test-results/
 playwright-report/
 coverage/

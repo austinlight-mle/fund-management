@@ -16,7 +16,9 @@ const ExcelJS = require('exceljs');
 const totp = require('../src/core/totp');
 
 const ROOT = path.join(__dirname, '..');
-const SHOTS = path.join(__dirname, 'screenshots');
+// E2E_LATE_FRAMES=1 runs everything with late animation frames (see below).
+const LATE_FRAMES = Boolean(process.env.E2E_LATE_FRAMES);
+const SHOTS = path.join(__dirname, LATE_FRAMES ? 'screenshots-late-frames' : 'screenshots');
 const PASSWORD = 'Passw0rd!';
 const MINUS = '−';
 
@@ -628,6 +630,17 @@ const steps = [
   delete env.ELECTRON_NO_ATTACH_CONSOLE;
   app = await electron.launch({ args: [ROOT, `--data-dir=${dataDir}`], cwd: ROOT, env });
   page = await app.firstWindow();
+  if (LATE_FRAMES) {
+    // Animation frames only arrive right after the next field takes focus, the
+    // worst case of a throttled window on a CI runner. Anything the app defers to
+    // a frame (such as moving focus) then lands in the middle of the next action.
+    await page.addInitScript(() => {
+      const queue = [];
+      window.requestAnimationFrame = (cb) => queue.push(cb);
+      window.addEventListener('focusin', () => setTimeout(() => queue.splice(0).forEach((cb) => cb(performance.now())), 0), true);
+    });
+    await page.reload();
+  }
   await page.setViewportSize({ width: 1440, height: 900 }).catch(() => {});
   page.on('pageerror', (err) => pageErrors.push(err.message));
   page.on('console', (msg) => {
