@@ -1,0 +1,132 @@
+{
+  "name": "fund-manage",
+  "productName": "Fund Manager",
+  "version": "1.0.0",
+  "description": "Personal monthly funds flow manager (Electron + SQLite)",
+  "main": "src/main/main.js",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Austin Light",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "demo": "node scripts/seed.js demo-data && node scripts/start.js --data-dir=demo-data",
+    "test": "node --test \"test/*.test.js\"",
+    "test:e2e": "node e2e/run-e2e.js",
+    "test:all": "npm test && npm run test:e2e",
+    "icon": "node scripts/make-icon.js",
+    "dist": "electron-builder --win --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:linux": "electron-builder --linux --publish never"
+  },
+  "dependencies": {
+    "better-sqlite3": "13.0.3",
+    "exceljs": "4.4.0",
+    "qrcode": "1.5.4"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.17.0",
+    "playwright": "1.63.0"
+  },
+  "build": {
+    "appId": "com.austinlight.fundmanage",
+    "productName": "Fund Manager",
+    "copyright": "Copyright © 2026 Austin Light",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "npmRebuild": false,
+    "artifactName": "FundManager-${version}-${os}-${arch}.${ext}",
+    "files": [
+      "src/**/*",
+      "package.json",
+      "!**/node_modules/better-sqlite3/{deps,src,binding.gyp}/**",
+      "!**/node_modules/better-sqlite3/{deps,src,binding.gyp}"
+    ],
+    "asarUnpack": [
+      "**/node_modules/better-sqlite3/**"
+    ],
+    "afterPack": "scripts/after-pack.js",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "files": [
+        "!**/node_modules/better-sqlite3/prebuilds/{darwin,linux,linuxmusl}-*.node"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "FundManager-${version}-win-${arch}-setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "FundManager-${version}-win-${arch}-portable.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.finance",
+      "files": [
+        "!**/node_modules/better-sqlite3/prebuilds/{win32,linux,linuxmusl}-*.node"
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "synopsis": "Personal monthly funds flow manager",
+      "maintainer": "Austin Light",
+      "files": [
+        "!**/node_modules/better-sqlite3/prebuilds/{win32,darwin}-*.node"
+      ]
+    },
+    "deb": {
+      "artifactName": "${name}_${version}_${arch}.${ext}"
+    }
+  },
+  "allowScripts": {
+    "better-sqlite3": false,
+    "electron-winstaller": false
+  }
+}

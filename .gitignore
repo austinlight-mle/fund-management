@@ -1,0 +1,67 @@
+# ---- dependencies ----------------------------------------------------------
+node_modules/
+.npm/
+.pnpm-store/
+*.tgz
+
+# ---- build output (electron-builder) ---------------------------------------
+dist/
+out/
+release/
+builder-debug.yml
+builder-effective-config.yaml
+
+# ---- local app data, databases and exports ---------------------------------
+demo-data/
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite
+*.sqlite3
+*.bak
+/*.xlsx
+
+# ---- tests -----------------------------------------------------------------
+e2e/screenshots/
+test-results/
+playwright-report/
+coverage/
+.nyc_output/
+
+# ---- logs ------------------------------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- secrets & signing material (never commit) -------------------------------
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.p8
+*.cer
+*.mobileprovision
+*.provisionprofile
+
+# ---- OS files ----------------------------------------------------------------
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# ---- editors & tools -----------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.claude/settings.local.json
+.cache/
+.eslintcache
